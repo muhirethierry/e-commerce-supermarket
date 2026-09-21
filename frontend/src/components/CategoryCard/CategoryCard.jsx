@@ -1,9 +1,17 @@
 function CategoryCard({ name, image }) {
   return (
-    <div>
-      <img src={image} alt={name} />
-      <h3>{name}</h3>
-    </div>
+    <a href="/products" className="category-card">
+
+      <div className="category-image">
+        <img src={image} alt={name} />
+      </div>
+
+      <div className="category-content">
+        <h3>{name}</h3>
+        <span>Shop Now →</span>
+      </div>
+
+    </a>
   )
 }
 
