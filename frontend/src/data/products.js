@@ -1,4 +1,6 @@
-const products = [
+import additionalDepartments from './additionalProducts.js'
+
+const existingProducts = [
   // =========================
   // FRUITS & VEGETABLES
   // =========================
@@ -605,6 +607,511 @@ const products = [
       'https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=600&q=80',
     stock: 30,
   },
+
+
+  // =========================
+  // BAKERY
+  // =========================
+
+  {
+    id: 51,
+    name: 'White Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 1500,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    stock: 40,
+  },
+
+  {
+    id: 52,
+    name: 'Whole Wheat Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 2000,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80',
+    stock: 35,
+  },
+
+  {
+    id: 53,
+    name: 'Brown Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 1800,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=600&q=80',
+    stock: 30,
+  },
+
+  {
+    id: 54,
+    name: 'French Baguette',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 2500,
+    unit: 'piece',
+    image:
+      'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=600&q=80',
+    stock: 25,
+  },
+
+  {
+    id: 55,
+    name: 'Multigrain Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 2500,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    stock: 25,
+  },
+
+  {
+    id: 56,
+    name: 'Milk Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 1800,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&w=600&q=80',
+    stock: 30,
+  },
+
+  {
+    id: 57,
+    name: 'Sweet Bread',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 2000,
+    unit: 'loaf',
+    image:
+      'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=600&q=80',
+    stock: 25,
+  },
+
+  {
+    id: 58,
+    name: 'Dinner Rolls',
+    category: 'Bakery',
+    subcategory: 'Bread',
+    price: 2500,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    stock: 35,
+  },
+
+  {
+    id: 59,
+    name: 'Chocolate Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 12000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
+    stock: 15,
+  },
+
+  {
+    id: 60,
+    name: 'Vanilla Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 10000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&w=600&q=80',
+    stock: 15,
+  },
+
+  {
+    id: 61,
+    name: 'Strawberry Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 13000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80',
+    stock: 12,
+  },
+
+  {
+    id: 62,
+    name: 'Red Velvet Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 15000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1586788224331-947f68671cf1?auto=format&fit=crop&w=600&q=80',
+    stock: 10,
+  },
+
+  {
+    id: 63,
+    name: 'Carrot Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 11000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600&q=80',
+    stock: 12,
+  },
+
+  {
+    id: 64,
+    name: 'Black Forest Cake',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 15000,
+    unit: 'cake',
+    image:
+      'https://images.unsplash.com/photo-1602351447937-745cb720612f?auto=format&fit=crop&w=600&q=80',
+    stock: 10,
+  },
+
+  {
+    id: 65,
+    name: 'Vanilla Cupcakes',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 5000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=600&q=80',
+    stock: 20,
+  },
+
+  {
+    id: 66,
+    name: 'Chocolate Cupcakes',
+    category: 'Bakery',
+    subcategory: 'Cakes',
+    price: 6000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?auto=format&fit=crop&w=600&q=80',
+    stock: 20,
+  },
+
+  {
+    id: 67,
+    name: 'Butter Croissants',
+    category: 'Bakery',
+    subcategory: 'Pastries',
+    price: 3500,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80',
+    stock: 25,
+  },
+
+  {
+    id: 68,
+    name: 'Chocolate Croissants',
+    category: 'Bakery',
+    subcategory: 'Pastries',
+    price: 4000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1623334044303-241021148842?auto=format&fit=crop&w=600&q=80',
+    stock: 20,
+  },
+
+  {
+    id: 69,
+    name: 'Cinnamon Rolls',
+    category: 'Bakery',
+    subcategory: 'Pastries',
+    price: 3500,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=600&q=80',
+    stock: 20,
+  },
+
+  {
+    id: 70,
+    name: 'Chocolate Muffins',
+    category: 'Bakery',
+    subcategory: 'Pastries',
+    price: 4000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=600&q=80',
+    stock: 20,
+  },
+
+  {
+    id: 71,
+    name: 'Butter Biscuits',
+    category: 'Bakery',
+    subcategory: 'Biscuits',
+    price: 2500,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80',
+    stock: 35,
+  },
+
+  {
+    id: 72,
+    name: 'Chocolate Biscuits',
+    category: 'Bakery',
+    subcategory: 'Biscuits',
+    price: 3000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=600&q=80',
+    stock: 30,
+  },
+
+  {
+    id: 73,
+    name: 'Cream Biscuits',
+    category: 'Bakery',
+    subcategory: 'Biscuits',
+    price: 2500,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80',
+    stock: 30,
+  },
+
+  {
+    id: 74,
+    name: 'Digestive Biscuits',
+    category: 'Bakery',
+    subcategory: 'Biscuits',
+    price: 3000,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?auto=format&fit=crop&w=600&q=80',
+    stock: 30,
+  },
+
+  {
+    id: 75,
+    name: 'Ginger Biscuits',
+    category: 'Bakery',
+    subcategory: 'Biscuits',
+    price: 2800,
+    unit: 'pack',
+    image:
+      'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80',
+    stock: 25,
+  },
 ]
+
+const categoryAliases = {
+  'Fruits & Vegetables': 'Fresh Fruits & Vegetables',
+  Bakery: 'Bakery & Pastry',
+}
+
+const categoryPhotoPools = {
+  'Fruits & Vegetables': [
+    'photo-1567306226416-28f0efdc88ce',
+    'photo-1571771894821-ce9b6c11b08e',
+    'photo-1542838132-92c53300491e',
+    'photo-1550258987-190a2d41a8ba',
+    'photo-1502741338009-cac2772e18bc',
+    'photo-1518843875459-f738682238a6',
+  ],
+  'Dairy & Eggs': [
+    'photo-1563636619-e9143da7973b',
+    'photo-1550583724-b2692b85b150',
+    'photo-1488477181946-6428a0291777',
+    'photo-1571805618149-3f48c7a6f8b6',
+    'photo-1582722872445-44dc5f7e3c8f',
+  ],
+  'Bakery': [
+    'photo-1509440159596-0249088772ff',
+    'photo-1558961363-fa8fdf82db35',
+    'photo-1483695028939-5bb13f8648b0',
+    'photo-1517433670267-08bbd4be890f',
+  ],
+  'Meat & Poultry': [
+    'photo-1607623814075-e51df1bdc82f',
+    'photo-1544025162-d76694265947',
+    'photo-1529692236671-f1f6cf9683ba',
+    'photo-1598103442097-8b74394b95c6',
+  ],
+  'Fish & Seafood': [
+    'photo-1510130387422-82bed34b37e9',
+    'photo-1544943910-4c1dc44aabef',
+    'photo-1559847844-5315695dadae',
+  ],
+  'Pantry & Dry Goods': [
+    'photo-1547592180-85f173990554',
+    'photo-1604719312566-8912e9c8a213',
+    'photo-1586201375761-83865001e31c',
+    'photo-1509440159596-0249088772ff',
+  ],
+  'Rice, Pasta & Grains': [
+    'photo-1586201375761-83865001e31c',
+    'photo-1621996346565-e3dbc646d9a9',
+    'photo-1511690743698-d9d85f2fbf38',
+  ],
+  'Canned & Jarred Foods': [
+    'photo-1584263347416-85a696b4eda7',
+    'photo-1606787619248-f301830a5a57',
+    'photo-1604908556857-1e94a1f98c58',
+  ],
+  'Snacks & Sweets': [
+    'photo-1578985545062-69928b1d9587',
+    'photo-1551024601-bec78aea704b',
+    'photo-1515003197210-e0cd71810b5f',
+  ],
+  'Beverages': [
+    'photo-1544145945-f90425340c7e',
+    'photo-1470337458703-46ad1756a187',
+    'photo-1513558161293-cdaf765ed2fd',
+  ],
+  'Frozen Foods': [
+    'photo-1571171681602-350896f18ef4',
+    'photo-1515003197210-e0cd71810b5f',
+    'photo-1556911220-bff31c812dba',
+  ],
+  'Breakfast Foods': [
+    'photo-1517673132405-a56a62b18caf',
+    'photo-1499636136210-6d10c0b2fbe7',
+    'photo-1525351484163-7529414344d8',
+  ],
+  'Sauces, Spices & Condiments': [
+    'photo-1596040033229-a9821ebd058d',
+    'photo-1501004318641-b39e6451bec6',
+    'photo-1504674900247-0877df9cc836',
+  ],
+  'Electronics & Small Appliances': [
+    'photo-1498049794561-7780e7231661',
+    'photo-1524758631624-e2822e304c36',
+    'photo-1518770660439-463335f01d8a',
+    'photo-1550009158-9ebf69173e03',
+  ],
+  'Stationery & School Supplies': [
+    'photo-1455390582262-044cdead277a',
+    'photo-1516321318423-f06f85e504b3',
+    'photo-1521587760476-6c12a4b040da',
+  ],
+  'Clothing & Accessories': [
+    'photo-1483985988355-763728e1935b',
+    'photo-1521572267360-ee0c2909d518',
+    'photo-1529139574466-a303027c1d8b',
+  ],
+  'Garden & Outdoor': [
+    'photo-1466692476868-aef1dfb1e735',
+    'photo-1416879595882-3373a0480b5b',
+    'photo-1501004318641-b39e6451bec6',
+  ],
+  'Health & Personal Care': [
+    'photo-1556228578-8c89e6adf883',
+    'photo-1522335789203-aabd1fc54bc9',
+    'photo-1571781926291-c477ebfd024b',
+  ],
+  'Household Cleaning': [
+    'photo-1583947215259-38e31be8751f',
+    'photo-1604335399105-a0c585fd81a1',
+    'photo-1556911220-bff31c812dba',
+  ],
+  'Laundry & Dishwashing': [
+    'photo-1604335399105-a0c585fd81a1',
+    'photo-1581578731548-c64695cc6952',
+    'photo-1527515637462-cff94eecc1ac',
+  ],
+  'Paper & Disposable Products': [
+    'photo-1584744982498-2f4103fdc6f3',
+    'photo-1501004318641-b39e6451bec6',
+    'photo-1528747045269-390fe33c19f2',
+  ],
+  'Pet Food & Pet Care': [
+    'photo-1548199973-03cce0bbc87b',
+    'photo-1517849845537-4d257902454a',
+    'photo-1511044568932-338cba0ad803',
+  ],
+  'Cosmetics & Beauty': [
+    'photo-1556229010-6c3f2c9ca5f8',
+    'photo-1522335789203-aabd1fc54bc9',
+    'photo-1524504388940-b1c1722653e1',
+  ],
+  'Organic & Natural Products': [
+    'photo-1542838132-92c53300491e',
+    'photo-1466637574441-749b8f19452f',
+    'photo-1501004318641-b39e6451bec6',
+  ],
+  'International Foods': [
+    'photo-1547592180-85f173990554',
+    'photo-1516100882582-96c3a05fe590',
+    'photo-1555939594-58d7cb561ad1',
+  ],
+  'Deli & Ready Meals': [
+    'photo-1544025162-d76694265947',
+    'photo-1517248135467-4c7edcad34c4',
+    'photo-1559847844-5315695dadae',
+  ],
+  'Alcoholic Drinks': [
+    'photo-1510812431401-41d2bd2722f3',
+    'photo-1514362545857-3bc16c4c7d1b',
+    'photo-1528605248644-14dd04022da1',
+  ],
+  'Seasonal & Special Offers': [
+    'photo-1542838132-92c53300491e',
+    'photo-1464226184884-fa52ac9a0d3d',
+    'photo-1502741338009-cac2772e18bc',
+  ],
+  'Home, Kitchen & Storage': [
+    'photo-1555041469-a586c61ea9bc',
+    'photo-1524758631624-e2822e304c36',
+    'photo-1505693416388-ac5ce068fe85',
+  ],
+}
+
+const buildGeneratedProductImage = (name, category) => {
+  const categoryPool = categoryPhotoPools[category] || categoryPhotoPools['Fruits & Vegetables']
+  const seed = `${name}-${category}`
+  let hash = 0
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = (hash * 31 + seed.charCodeAt(index)) >>> 0
+  }
+
+  const photoId = categoryPool[hash % categoryPool.length]
+  return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=600&q=80`
+}
+
+const normalizedProducts = existingProducts.map((product) => ({
+  ...product,
+  category: categoryAliases[product.category] || product.category,
+}))
+
+const firstGeneratedId = Math.max(...normalizedProducts.map((product) => product.id)) + 1
+
+const generatedProducts = additionalDepartments.flatMap((department) =>
+  department.names.split('|').map((name, index) => ({
+    id: firstGeneratedId + additionalDepartments
+      .slice(0, additionalDepartments.indexOf(department))
+      .reduce((count, previous) => count + previous.names.split('|').length, 0) + index,
+    name,
+    category: department.category,
+    subcategory: department.category,
+    price: department.price + (index % 5) * 250,
+    unit: department.unit,
+    image: buildGeneratedProductImage(name, department.category),
+    stock: 18 + (index % 5) * 7,
+    demoProduct: true,
+    ageRestricted: department.category === 'Alcoholic Drinks',
+  })),
+)
+
+const products = [...normalizedProducts, ...generatedProducts]
 
 export default products

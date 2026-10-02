@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react'
+
 function Hero() {
   return (
     <section className="hero">
@@ -21,7 +23,7 @@ function Hero() {
         <div className="hero-buttons">
           <a href="/products" className="hero-primary">
             Shop Now
-            <span>→</span>
+            <ArrowRight aria-hidden="true" size={18} />
           </a>
 
           <a href="/categories" className="hero-secondary">

@@ -1,76 +1,50 @@
+import { Search, ShoppingBasket, Store, UserRound } from 'lucide-react'
+import { useCart } from '../../context/CartContext'
+
 function Navbar() {
+  const { itemCount } = useCart()
+  const path = window.location.pathname
+
   return (
     <header className="navbar">
       <div className="navbar-container">
-
-        {/* Logo */}
-        <a href="/" className="logo">
-          <span className="logo-icon">🛒</span>
-
-          <div className="logo-text">
-            <h2>FreshMart</h2>
-            <span>Supermarket</span>
-          </div>
+        <a href="/" className="logo" aria-label="FreshMart home">
+          <span className="logo-icon"><Store aria-hidden="true" size={22} /></span>
+          <span className="logo-text">
+            <strong>FreshMart</strong>
+            <span>Good food, close by</span>
+          </span>
         </a>
 
-        {/* Main Navigation */}
-        <nav className="nav-links">
-          <a href="/" className="active">
-            Home
-          </a>
-
-          <a href="/products">
-            Shop
-          </a>
-
-          <a href="/categories">
-            Categories
-          </a>
+        <nav className="nav-links" aria-label="Main navigation">
+          <a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a>
+          <a href="/products" aria-current={path === '/products' ? 'page' : undefined}>Shop</a>
+          <a href="/categories" aria-current={path === '/categories' ? 'page' : undefined}>Categories</a>
         </nav>
 
-        {/* Search */}
-        <div className="search-box">
+        <form className="search-box" action="/products" method="get" role="search">
           <input
-            type="text"
-            placeholder="Search products..."
+            type="search"
+            name="q"
+            placeholder="Search groceries..."
+            aria-label="Search groceries"
           />
-
-          <button aria-label="Search">
-            🔍
+          <button type="submit" aria-label="Search">
+            <Search aria-hidden="true" size={18} />
           </button>
-        </div>
+        </form>
 
-        {/* Actions */}
         <div className="nav-actions">
-
-          <button
-            className="nav-icon"
-            aria-label="Wishlist"
-          >
-            ♡
-          </button>
-
-          <button
-            className="nav-icon"
-            aria-label="Account"
-          >
-            👤
-          </button>
-
-          <button className="cart-button">
-            <span className="cart-icon">🛒</span>
-
-            <span className="cart-text">
-              Cart
-            </span>
-
-            <span className="cart-count">
-              0
-            </span>
-          </button>
-
+          <a className="account-link" href="/login" aria-label="Sign in to your account">
+            <UserRound aria-hidden="true" size={18} />
+            <span>Sign in</span>
+          </a>
+          <a className="cart-button" href="/cart" aria-label={`Cart, ${itemCount} items`}>
+            <ShoppingBasket className="cart-icon" aria-hidden="true" size={18} />
+            <span className="cart-text">Basket</span>
+            <span className="cart-count">{itemCount}</span>
+          </a>
         </div>
-
       </div>
     </header>
   )
