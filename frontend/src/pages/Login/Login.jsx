@@ -1,15 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Eye, EyeOff, Leaf, LockKeyhole } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Eye, EyeOff, Leaf, LockKeyhole } from 'lucide-react'
+import { signIn, signInWithGoogle } from '../../api/catalog'
+
+function getPostLoginPath() {
+	const next = new URLSearchParams(window.location.search).get('next')
+	return next?.startsWith('/') && !next.startsWith('//') ? next : '/'
+}
 
 function Login() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [message, setMessage] = useState('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [loginSuccess, setLoginSuccess] = useState(false)
 	const googleButtonRef = useRef(null)
 
 	useEffect(() => {
 		const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 		if (!clientId) {
-			setMessage('Google sign-in needs a Google OAuth client ID. Add VITE_GOOGLE_CLIENT_ID to your frontend .env file.')
+			setMessage('Google sign-in needs VITE_GOOGLE_CLIENT_ID in the frontend and the matching GOOGLE_CLIENT_ID in the backend.')
 			return
 		}
 
@@ -19,10 +27,21 @@ function Login() {
 
 			window.google.accounts.id.initialize({
 				client_id: clientId,
-				callback: (response) => {
-					setMessage(response.credential
-						? 'Google returned a sign-in credential. This storefront still needs a server to verify it and create your session.'
-						: 'Google sign-in did not return a credential.')
+				callback: async (response) => {
+					if (!response.credential) {
+						setMessage('Google sign-in did not return a credential.')
+						return
+					}
+					setIsSubmitting(true)
+					try {
+						await signInWithGoogle(response.credential)
+						setMessage('')
+						setLoginSuccess(true)
+					} catch (error) {
+						setMessage(error.message)
+					} finally {
+						setIsSubmitting(false)
+					}
 				},
 			})
 			window.google.accounts.id.renderButton(googleButtonRef.current, {
@@ -58,7 +77,13 @@ function Login() {
 
 	function handleSubmit(event) {
 		event.preventDefault()
-		setMessage('Account sign-in is not connected yet. Your details were not sent or saved.')
+		const formData = new FormData(event.currentTarget)
+		setIsSubmitting(true)
+		setMessage('')
+		signIn({ email: formData.get('email'), password: formData.get('password') })
+			.then(() => setLoginSuccess(true))
+			.catch((error) => setMessage(error.message))
+			.finally(() => setIsSubmitting(false))
 	}
 
 	return (
@@ -77,6 +102,16 @@ function Login() {
 				<span className="login-eyebrow">YOUR EVERYDAY SHOP, MADE EASY</span>
 				<h1 id="login-title">Welcome back.</h1>
 				<p className="login-intro">Sign in to continue your fresh grocery routine.</p>
+				{loginSuccess && (
+					<div className="auth-success auth-success-compact" role="status">
+						<CheckCircle2 aria-hidden="true" size={22} />
+						<div>
+							<strong>Login successful.</strong>
+							<p>You’re signed in to FreshMart.</p>
+						</div>
+						<a className="auth-success-link" href={getPostLoginPath()}>Continue</a>
+					</div>
+				)}
 
 				<form className="login-form" onSubmit={handleSubmit}>
 					<label htmlFor="login-email">Email address</label>
@@ -86,7 +121,7 @@ function Login() {
 						type="email"
 						autoComplete="email"
 						placeholder="you@example.com"
-						required
+												required
 					/>
 
 					<div className="login-password-label">
@@ -121,7 +156,9 @@ function Login() {
 						</label>
 					</div>
 
-					<button className="login-submit" type="submit">Sign in</button>
+					<button className="login-submit" type="submit" disabled={isSubmitting}>
+						{isSubmitting ? 'Signing in…' : 'Sign in'}
+					</button>
 
 					<div className="login-divider"><span>or continue with</span></div>
 					<div className="login-google" ref={googleButtonRef} />
@@ -129,9 +166,9 @@ function Login() {
 				</form>
 
 				<p className="login-switch">
-					Don’t have an account? <a href="/register">Sign up</a>
+					Don’t have an account? <a href={`/register${window.location.search}`}>Sign up</a>
 				</p>
-				<p className="login-demo-note">This storefront preview does not have account authentication enabled yet.</p>
+				<p className="login-demo-note">Your session is protected by a server-set HttpOnly cookie.</p>
 			</section>
 		</main>
 	)

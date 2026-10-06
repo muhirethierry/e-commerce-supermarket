@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { getCurrentUser } from '../api/catalog'
 
 const CartContext = createContext(null)
 const storageKey = 'freshmart-cart'
@@ -14,12 +15,32 @@ function readCart() {
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(readCart)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [sessionChecked, setSessionChecked] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    getCurrentUser({ signal: controller.signal })
+      .then(() => setIsAuthenticated(true))
+      .catch(() => setIsAuthenticated(false))
+      .finally(() => {
+        if (!controller.signal.aborted) setSessionChecked(true)
+      })
+
+    return () => controller.abort()
+  }, [])
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(items))
   }, [items])
 
   function addItem(product) {
+    if (!isAuthenticated) {
+      const next = `${window.location.pathname}${window.location.search}`
+      window.location.assign(`/login?next=${encodeURIComponent(next)}`)
+      return false
+    }
+
     setItems((currentItems) => {
       const existing = currentItems.find((item) => item.id === product.id)
 
@@ -33,6 +54,7 @@ export function CartProvider({ children }) {
 
       return [...currentItems, { ...product, quantity: 1 }]
     })
+    return true
   }
 
   function setQuantity(productId, quantity) {
@@ -57,7 +79,7 @@ export function CartProvider({ children }) {
   const subtotal = items.reduce((total, item) => total + item.price * item.quantity, 0)
 
   return (
-    <CartContext.Provider value={{ items, itemCount, subtotal, addItem, setQuantity, removeItem, clearCart }}>
+    <CartContext.Provider value={{ items, itemCount, subtotal, addItem, setQuantity, removeItem, clearCart, isAuthenticated, sessionChecked }}>
       {children}
     </CartContext.Provider>
   )

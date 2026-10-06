@@ -26,7 +26,7 @@ function playAddSound() {
 }
 
 function ProductCard({ product }) {
-  const { addItem } = useCart()
+  const { addItem, isAuthenticated, sessionChecked } = useCart()
   const isLowStock = product.stock > 0 && product.stock <= 10
 
   return (
@@ -55,14 +55,13 @@ function ProductCard({ product }) {
           <button
             className="product-add-button"
             type="button"
-            disabled={product.stock === 0}
+            disabled={product.stock === 0 || !sessionChecked}
             onClick={() => {
-              addItem(product)
-              playAddSound()
+              if (addItem(product)) playAddSound()
             }}
           >
             <ShoppingBasket aria-hidden="true" size={17} />
-            <span>Add</span>
+            <span>{!sessionChecked ? 'Checking…' : isAuthenticated ? 'Add' : 'Sign in'}</span>
           </button>
         </div>
       </div>

@@ -1,29 +1,52 @@
 import { useState } from 'react'
 import { useCart } from '../../context/CartContext'
+import { createOrder } from '../../api/catalog'
 
 function Checkout() {
-	const { items, subtotal } = useCart()
-	const [isComplete, setIsComplete] = useState(false)
+	const { items, subtotal, clearCart } = useCart()
+	const [order, setOrder] = useState(null)
 	const [paymentMethod, setPaymentMethod] = useState('mobile-money')
+	const [error, setError] = useState('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const paymentLabels = {
 		'mobile-money': 'Mobile Money (MTN MoMo / Airtel Money)',
 		card: 'Card (Visa / Mastercard)',
 		cash: 'Cash on delivery',
 	}
 
-	function handleSubmit(event) {
+	async function handleSubmit(event) {
 		event.preventDefault()
-		setIsComplete(true)
+		const formData = new FormData(event.currentTarget)
+		setError('')
+		setIsSubmitting(true)
+		try {
+			const result = await createOrder({
+				customer: {
+					name: formData.get('name'),
+					email: formData.get('email'),
+					phone: formData.get('phone'),
+					address: formData.get('address'),
+				},
+				paymentMethod,
+				items: items.map((item) => ({ productId: item.id, quantity: item.quantity })),
+			})
+			setOrder(result.data)
+			clearCart()
+		} catch (requestError) {
+			setError(requestError.message)
+		} finally {
+			setIsSubmitting(false)
+		}
 	}
 
-	if (isComplete) {
+	if (order) {
 		return (
 			<main className="checkout-page">
 				<section className="checkout-confirmation" aria-live="polite">
-					<span>CHECKOUT PREVIEW</span>
-					<h1>Your checkout details are ready.</h1>
-					<p>Selected payment method: <strong>{paymentLabels[paymentMethod]}</strong>. This preview did not create an order or take payment, and your basket has been kept.</p>
-					<a href="/cart">Return to your basket</a>
+					<span>ORDER RECEIVED</span>
+					<h1>Thanks, {order.customerName}.</h1>
+					<p>Your order <strong>{order.reference}</strong> has been saved. Payment method: <strong>{paymentLabels[order.paymentMethod]}</strong>. Pay when your order arrives; no online payment was taken.</p>
+					<p>Order total: <strong>{order.subtotal.toLocaleString()} RWF</strong>. Delivery charges are not included yet.</p>
 					<a href="/products">Continue shopping</a>
 				</section>
 			</main>
@@ -87,8 +110,11 @@ function Checkout() {
 							<span><strong>Cash on delivery</strong><small>Pay when your order arrives</small></span>
 						</label>
 					</fieldset>
-					<button type="submit">Preview checkout</button>
-					<p>Preview only. No order is placed and no payment is processed. Delivery charges and final totals require live store data.</p>
+					<button type="submit" disabled={isSubmitting}>
+						{isSubmitting ? 'Submitting…' : paymentMethod === 'cash' ? 'Place cash-on-delivery order' : 'Continue to payment'}
+					</button>
+					{error && <p className="checkout-error" role="alert">{error}</p>}
+					<p>Cash-on-delivery orders are saved now. Card and Mobile Money need a payment provider before they can be accepted.</p>
 				</form>
 				<aside className="checkout-summary">
 					<h2>Your order</h2>

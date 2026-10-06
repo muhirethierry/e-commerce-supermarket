@@ -6,8 +6,10 @@ import Categories from './pages/Categories/Categories'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword'
+import ResetPassword from './pages/ResetPassword/ResetPassword'
 import ProductDetails from './pages/ProductDetails/ProductDetails'
 import NotFound from './pages/NotFound/NotFound'
+import AdminDashboard from './pages/Admin/AdminDashboard'
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
 import Chatbot from './components/Chatbot/Chatbot'
@@ -26,6 +28,8 @@ function App() {
   else if (path === '/login') page = <Login />
   else if (path === '/register') page = <Register />
   else if (path === '/forgot-password') page = <ForgotPassword />
+   else if (path === '/reset-password') page = <ResetPassword />
+  else if (path === '/admin') page = <AdminDashboard />
   else if (productMatch) page = <ProductDetails productId={decodeURIComponent(productMatch[1])} />
   else page = <NotFound />
 

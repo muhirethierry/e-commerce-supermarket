@@ -1,94 +1,60 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { MessageCircleMore, Send, Sparkles, X } from 'lucide-react'
-import products from '../../data/products'
+import { askShoppingAssistant } from '../../api/catalog'
 
 const quickQuestions = [
-  'Recommend fresh fruits',
-  'Best breakfast deals',
-  'Budget-friendly items',
-  'Need kitchen essentials',
+  'What fruit is in stock?',
+  'Suggest a low-cost breakfast',
+  'Do you have kitchen essentials?',
 ]
-
-function getAssistantReply(input) {
-  const text = input.toLowerCase()
-  const categorySuggestions = {
-    fruit: ['Fresh Bananas', 'Fresh Apples', 'Fresh Oranges'],
-    breakfast: ['Corn Flakes cereal', 'Instant oats original', 'Fresh Eggs'],
-    kitchen: ['Electric kettle 1.7 L', 'Countertop blender', 'Hand blender set'],
-    budget: ['Fresh Potatoes', 'Fresh Onions', 'Fresh Garlic'],
-  }
-
-  if (text.includes('fruit') || text.includes('vegetable')) {
-    return `Fresh picks for you: ${categorySuggestions.fruit.join(', ')}. These are great for healthy meals and quick shopping.`
-  }
-
-  if (text.includes('breakfast') || text.includes('morning')) {
-    return `For breakfast, I recommend: ${categorySuggestions.breakfast.join(', ')}. They are easy, filling, and popular with customers.`
-  }
-
-  if (text.includes('kitchen') || text.includes('home') || text.includes('appliance')) {
-    return `Kitchen essentials to check: ${categorySuggestions.kitchen.join(', ')}. These are useful for everyday cooking and quick meals.`
-  }
-
-  if (text.includes('cheap') || text.includes('budget') || text.includes('low')) {
-    return `Budget-friendly choices: ${categorySuggestions.budget.join(', ')}. They offer good value without compromising quality.`
-  }
-
-  if (text.includes('milk') || text.includes('dairy') || text.includes('egg')) {
-    return 'Our dairy selection is strong right now. Try fresh whole milk, plain yogurt, and fresh eggs for everyday essentials.'
-  }
-
-  if (text.includes('snack') || text.includes('sweet')) {
-    return 'Popular snack picks include mixed nuts, dried mango slices, and granola snack bars. They are easy to grab and great for lunchboxes.'
-  }
-
-  const featured = products.filter((item) => item.category === 'Fruits & Vegetables').slice(0, 3)
-  const names = featured.map((item) => item.name).join(', ')
-
-  return `I can help with fresh groceries, breakfast picks, kitchen essentials, and budget suggestions. Try asking about fruits, dairy, snacks, or deals. For example: ${names}.`
-}
 
 function Chatbot() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
+  const [isSending, setIsSending] = useState(false)
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
-      text: 'Hi! I am your shopping assistant. Ask me for fruit ideas, breakfast picks, or budget-friendly items.',
+      text: 'Hi, I can help you find items in the current FreshMart catalog. What are you shopping for?',
     },
   ])
 
-  const quickReplyText = useMemo(() => quickQuestions, [])
+  async function sendMessage(text) {
+    const trimmed = text.trim()
+    if (!trimmed || isSending) return
 
-  function addMessage(text, sender = 'user') {
-    const message = {
-      id: Date.now() + Math.random(),
-      sender,
-      text,
+    const history = messages
+      .filter((message) => message.sender === 'user' || message.sender === 'bot')
+      .slice(-8)
+      .map((message) => ({ role: message.sender === 'bot' ? 'assistant' : 'user', content: message.text }))
+    const userMessage = { id: `${Date.now()}-user`, sender: 'user', text: trimmed }
+    setMessages((current) => [...current, userMessage])
+    setInput('')
+    setIsSending(true)
+
+    try {
+      const response = await askShoppingAssistant(trimmed, history)
+      setMessages((current) => [...current, {
+        id: `${Date.now()}-assistant`,
+        sender: 'bot',
+        text: response.data.reply,
+      }])
+    } catch (error) {
+      setMessages((current) => [...current, {
+        id: `${Date.now()}-error`,
+        sender: 'bot',
+        text: error.message,
+        error: true,
+      }])
+    } finally {
+      setIsSending(false)
     }
-
-    setMessages((current) => [...current, message])
   }
 
   function handleSubmit(event) {
     event.preventDefault()
-
-    const trimmed = input.trim()
-    if (!trimmed) return
-
-    addMessage(trimmed, 'user')
-    setTimeout(() => {
-      addMessage(getAssistantReply(trimmed), 'bot')
-    }, 250)
-    setInput('')
-  }
-
-  function handleQuickQuestion(question) {
-    addMessage(question, 'user')
-    setTimeout(() => {
-      addMessage(getAssistantReply(question), 'bot')
-    }, 250)
+    sendMessage(input)
   }
 
   return (
@@ -100,7 +66,7 @@ function Chatbot() {
               <div className="chatbot-icon"><Sparkles size={16} /></div>
               <div>
                 <h3>AI Assistant</h3>
-                <span>Shopping help</span>
+                <span>Catalog-aware shopping help</span>
               </div>
             </div>
             <button type="button" className="chatbot-close" aria-label="Close chat" onClick={() => setOpen(false)}>
@@ -108,39 +74,44 @@ function Chatbot() {
             </button>
           </div>
 
-          <div className="chatbot-body">
+          <div className="chatbot-body" aria-live="polite" aria-busy={isSending}>
             {messages.map((message) => (
-              <div key={message.id} className={`chat-message ${message.sender}`}>
+              <div key={message.id} className={`chat-message ${message.sender}${message.error ? ' error' : ''}`}>
                 {message.text}
               </div>
             ))}
+            {isSending && <div className="chat-message bot" role="status">Checking the catalog…</div>}
           </div>
 
-          <div className="chatbot-quick-actions">
-            {quickReplyText.map((question) => (
-              <button key={question} type="button" onClick={() => handleQuickQuestion(question)}>
-                {question}
-              </button>
-            ))}
-          </div>
+          {!isSending && messages.length === 1 && (
+            <div className="chatbot-quick-actions">
+              {quickQuestions.map((question) => (
+                <button key={question} type="button" onClick={() => sendMessage(question)}>
+                  {question}
+                </button>
+              ))}
+            </div>
+          )}
 
           <form className="chatbot-form" onSubmit={handleSubmit}>
             <input
               type="text"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask about groceries..."
+              placeholder="Ask about groceries…"
               aria-label="Chat message"
+              maxLength={1000}
+              disabled={isSending}
             />
-            <button type="submit" aria-label="Send message">
+            <button type="submit" aria-label="Send message" disabled={isSending || !input.trim()}>
               <Send size={15} />
             </button>
           </form>
         </div>
       )}
 
-      <button type="button" className="chatbot-fab" aria-label="Open AI assistant" onClick={() => setOpen((current) => !current)}>
-        <MessageCircleMore size={24} />
+      <button type="button" className="chatbot-fab" aria-label={open ? 'Close AI assistant' : 'Open AI assistant'} onClick={() => setOpen((current) => !current)}>
+        {open ? <X size={22} /> : <MessageCircleMore size={24} />}
       </button>
     </div>
   )
