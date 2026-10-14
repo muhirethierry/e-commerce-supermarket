@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, Leaf } from 'lucide-react'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
+import { apiBaseUrl } from '../../api/catalog'
 
 function ForgotPassword() {
 	const [status, setStatus] = useState({ type: '', text: '' })
@@ -13,7 +12,7 @@ function ForgotPassword() {
 		setLoading(true)
 		setStatus({ type: '', text: '' })
 		try {
-			const res = await fetch(`${API_BASE}/auth/password-reset/request`, {
+			const res = await fetch(`${apiBaseUrl}/auth/password-reset/request`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email }),

@@ -1,4 +1,7 @@
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
+const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '')
+export const apiBaseUrl = /^https?:\/\//i.test(configuredApiBaseUrl) && !configuredApiBaseUrl.endsWith('/api')
+	? `${configuredApiBaseUrl}/api`
+	: configuredApiBaseUrl
 
 async function request(path, options = {}) {
 	const response = await fetch(`${apiBaseUrl}${path}`, {

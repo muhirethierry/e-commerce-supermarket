@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, Leaf } from 'lucide-react'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
+import { apiBaseUrl } from '../../api/catalog'
 
 function ResetPassword() {
 	const token = new URLSearchParams(window.location.search).get('token') || ''
@@ -20,7 +19,7 @@ function ResetPassword() {
 		setLoading(true)
 		setStatus({ type: '', text: '' })
 		try {
-			const res = await fetch(`${API_BASE}/auth/password-reset/complete`, {
+			const res = await fetch(`${apiBaseUrl}/auth/password-reset/complete`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ token, password }),

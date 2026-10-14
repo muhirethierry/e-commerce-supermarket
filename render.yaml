@@ -1,17 +1,10 @@
-databases:
-  - name: freshmart-db
-    databaseName: freshmart
-    user: freshmart
-    plan: free # Temporary demo database; Render free Postgres expires after 30 days.
-    region: frankfurt
-
 services:
   - type: web
     name: freshmart-api
     runtime: node
     plan: free
     region: frankfurt
-    buildCommand: cd backend && npm install
+    buildCommand: cd backend && npm ci
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -19,9 +12,7 @@ services:
       - key: AUTH_SECRET
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: freshmart-db
-          property: connectionString
+        sync: false # Provide the Neon pooled connection URL in the Render Dashboard.
       - key: CORS_ORIGINS
         value: https://freshmart-store.onrender.com # Update if Render assigns a different static-site URL.
       - key: FRONTEND_BASE_URL
@@ -31,7 +22,7 @@ services:
     name: freshmart-store
     runtime: static
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     staticPublishPath: dist
     routes:
       - type: rewrite
